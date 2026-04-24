@@ -161,6 +161,7 @@ export function createStatBlockSheet(ParentSheet) {
         target: this._formatTarget(sys.target),
         trigger: sys.trigger,
         rollEnabled: !!sys.power?.roll?.enabled,
+        hasTiers: tiers.length > 0,
         characteristicKey: sys.power?.characteristic?.key,
         characteristicValue: this._formatSigned(sys.power?.characteristic?.value ?? 0),
         tiers,

@@ -38,6 +38,8 @@
       <span class="ds-power-formula">2d10 {{characteristicValue}}</span>
       {{#if characteristicKey}}<span class="ds-power-char">({{characteristicKey}})</span>{{/if}}
     </button>
+  {{/if}}
+  {{#if hasTiers}}
     <ol class="ds-tiers">
       {{#each tiers}}
         <li class="ds-tier ds-tier-{{this.tier}}">
