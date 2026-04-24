@@ -9,6 +9,9 @@ export function createStatBlockSheet(ParentSheet) {
       position: { width: 580, height: 760 },
       window: { resizable: true, icon: "fa-solid fa-scroll" },
       actions: {
+        // Override parent's private handlers so we control item lookup via data-item-id.
+        useAbility: this.prototype._onUseAbility,
+        edit: this.prototype._onEditItem,
         editStamina: this.prototype._onEditStamina,
       },
     };
@@ -23,6 +26,10 @@ export function createStatBlockSheet(ParentSheet) {
     async _prepareContext(options) {
       const ctx = await super._prepareContext(options);
       const system = this.actor.system;
+
+      // Explicitly set these so our templates always have them regardless of parent context shape.
+      ctx.actor = this.actor;
+      ctx.system = system;
 
       ctx.abilities = this.actor.items
         .filter(i => i.type === "ability")
@@ -99,8 +106,10 @@ export function createStatBlockSheet(ParentSheet) {
 
     _formatResistances(map) {
       if (!map) return [];
-      if (map instanceof Map) return Array.from(map, ([type, value]) => ({ type, value }));
-      return Object.entries(map).map(([type, value]) => ({ type, value }));
+      const pairs = map instanceof Map
+        ? Array.from(map, ([type, value]) => ({ type, value }))
+        : Object.entries(map).map(([type, value]) => ({ type, value }));
+      return pairs.filter(r => Number(r.value) !== 0);
     }
 
     _formatSet(s) {
@@ -141,6 +150,20 @@ export function createStatBlockSheet(ParentSheet) {
       if (val.description) parts.push(val.description);
       if (val.value && !parts.length) parts.push(String(val.value));
       return parts.filter(Boolean).join("; ");
+    }
+
+    async _onUseAbility(event, target) {
+      const itemId = target.dataset.itemId ?? target.closest("[data-item-id]")?.dataset.itemId;
+      const item = this.actor.items.get(itemId);
+      if (!item) return;
+      if (typeof item.roll === "function") await item.roll();
+      else if (typeof item.use === "function") await item.use();
+    }
+
+    async _onEditItem(event, target) {
+      const itemId = target.dataset.itemId ?? target.closest("[data-item-id]")?.dataset.itemId;
+      const item = this.actor.items.get(itemId);
+      item?.sheet.render(true);
     }
 
     async _onEditStamina(event, target) {
