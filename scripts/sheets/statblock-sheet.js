@@ -9,7 +9,10 @@ export function createStatBlockSheet(ParentSheet) {
       position: { width: 580, height: 760 },
       window: { resizable: true, icon: "fa-solid fa-scroll" },
       actions: {
-        // Override parent's private handlers so we control item lookup via data-item-id.
+        // AppV2 merges DEFAULT_OPTIONS up the prototype chain, so the parent's `roll`
+        // and `freeStrike` actions are inherited automatically — no need to redeclare them.
+        // We only override `useAbility` and `edit` because the parent's private handlers
+        // resolve items via `data-document-id`; our templates use `data-item-id` instead.
         useAbility: this.prototype._onUseAbility,
         edit: this.prototype._onEditItem,
         editStamina: this.prototype._onEditStamina,
@@ -43,16 +46,34 @@ export function createStatBlockSheet(ParentSheet) {
       ctx.actor = this.actor;
       ctx.system = system;
 
-      // Single pass: partition items into abilities and features simultaneously.
-      const allAbilities = [];
-      const features = [];
+      // Single pass: partition items, keeping raw item refs for enrichment.
+      const abilityItems = [];
+      const featureItems = [];
       for (const item of this.actor.items) {
-        if (item.type === "ability") allAbilities.push(this._prepareAbility(item));
-        else if (item.type === "feature") features.push(item);
+        if (item.type === "ability") abilityItems.push(item);
+        else if (item.type === "feature") featureItems.push(item);
       }
 
+      const allAbilities = abilityItems.map(item => this._prepareAbility(item));
+
+      // Enrich effect HTML so inline roll links and @UUID refs are functional.
+      await Promise.all(abilityItems.map(async (item, i) => {
+        const a = allAbilities[i];
+        const opts = { relativeTo: item };
+        if (a.effectBefore) a.effectBefore = await TextEditor.enrichHTML(a.effectBefore, opts);
+        if (a.effectAfter)  a.effectAfter  = await TextEditor.enrichHTML(a.effectAfter,  opts);
+      }));
+
       ctx.abilities = allAbilities;
-      ctx.features = features;
+
+      // Convert features to plain objects with enriched ProseMirror descriptions.
+      ctx.features = await Promise.all(featureItems.map(async item => ({
+        id: item.id,
+        name: item.name,
+        enrichedDescription: item.system.description?.value
+          ? await TextEditor.enrichHTML(item.system.description.value, { relativeTo: item })
+          : "",
+      })));
 
       // Group abilities by type in a single pass via a bucket Map.
       const { TYPE_ORDER, TYPE_LABELS } = this.constructor;

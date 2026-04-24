@@ -14,8 +14,8 @@
           <i class="fa-solid fa-pen-to-square"></i>
         </button>
       </div>
-      {{#if this.system.description.value}}
-        <div class="ds-trait-body">{{{this.system.description.value}}}</div>
+      {{#if enrichedDescription}}
+        <div class="ds-trait-body">{{{enrichedDescription}}}</div>
       {{/if}}
     </div>
   {{/each}}
