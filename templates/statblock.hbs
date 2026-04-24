@@ -1,0 +1,16 @@
+<section class="ds-statblock">
+  {{> modules/draw-steel-stat-block-styling/templates/partials/header.hbs }}
+  {{> modules/draw-steel-stat-block-styling/templates/partials/stats-row.hbs }}
+  {{> modules/draw-steel-stat-block-styling/templates/partials/characteristics.hbs }}
+  {{> modules/draw-steel-stat-block-styling/templates/partials/resistances.hbs }}
+
+  {{#if features.length}}
+    <hr class="ds-divider" />
+    {{> modules/draw-steel-stat-block-styling/templates/partials/traits.hbs }}
+  {{/if}}
+
+  {{#if abilities.length}}
+    <hr class="ds-divider" />
+    {{> modules/draw-steel-stat-block-styling/templates/partials/abilities.hbs }}
+  {{/if}}
+</section>

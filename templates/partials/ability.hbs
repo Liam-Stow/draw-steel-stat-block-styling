@@ -1,0 +1,58 @@
+<article class="ds-ability ds-ability-type-{{type}}" data-item-id="{{id}}">
+  <header class="ds-ability-head">
+    <img class="ds-ability-icon" src="{{img}}" alt="" />
+    <div class="ds-ability-title">
+      <button type="button" class="ds-ability-name"
+              data-action="useAbility"
+              data-item-id="{{id}}"
+              data-tooltip="Use {{name}}">{{name}}</button>
+      <span class="ds-ability-type">{{typeLabel}}</span>
+    </div>
+    <button type="button" class="ds-icon-btn"
+            data-action="edit"
+            data-item-id="{{id}}"
+            data-tooltip="Edit">
+      <i class="fa-solid fa-pen-to-square"></i>
+    </button>
+  </header>
+
+  {{#if keywords}}
+    <div class="ds-ability-keywords">{{keywords}}</div>
+  {{/if}}
+
+  <div class="ds-ability-meta">
+    {{#if distance}}<div class="ds-meta-col"><span class="ds-meta-label">Distance</span><span class="ds-meta-value">{{distance}}</span></div>{{/if}}
+    {{#if target}}<div class="ds-meta-col"><span class="ds-meta-label">Target</span><span class="ds-meta-value">{{target}}</span></div>{{/if}}
+    {{#if trigger}}<div class="ds-meta-col ds-meta-col-wide"><span class="ds-meta-label">Trigger</span><span class="ds-meta-value">{{trigger}}</span></div>{{/if}}
+  </div>
+
+  {{#if effectBefore}}
+    <div class="ds-ability-effect">{{{effectBefore}}}</div>
+  {{/if}}
+
+  {{#if rollEnabled}}
+    <button type="button" class="ds-power-row"
+            data-action="useAbility"
+            data-item-id="{{id}}"
+            data-tooltip="Roll power (2d10 + {{characteristicKey}})">
+      <span class="ds-power-formula">2d10 {{characteristicValue}}</span>
+      {{#if characteristicKey}}<span class="ds-power-char">({{characteristicKey}})</span>{{/if}}
+    </button>
+    <ol class="ds-tiers">
+      {{#each tiers}}
+        <li class="ds-tier ds-tier-{{this.tier}}">
+          <span class="ds-tier-range">{{this.rangeLabel}}</span>
+          <span class="ds-tier-text">{{this.text}}</span>
+        </li>
+      {{/each}}
+    </ol>
+  {{/if}}
+
+  {{#if effectAfter}}
+    <div class="ds-ability-effect">{{{effectAfter}}}</div>
+  {{/if}}
+
+  {{#if spendText}}
+    <div class="ds-ability-spend"><strong>Spend {{spendValue}}:</strong> {{{spendText}}}</div>
+  {{/if}}
+</article>

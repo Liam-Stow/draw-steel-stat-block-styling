@@ -1,0 +1,22 @@
+<div class="ds-resistances">
+  {{#if immunities.length}}
+    <div class="ds-resistance-row">
+      <span class="ds-resistance-label">Immunities</span>
+      <span class="ds-resistance-pills">
+        {{#each immunities}}
+          <span class="ds-pill ds-pill-immune">{{this.type}} {{this.value}}</span>
+        {{/each}}
+      </span>
+    </div>
+  {{/if}}
+  {{#if weaknesses.length}}
+    <div class="ds-resistance-row">
+      <span class="ds-resistance-label">Weaknesses</span>
+      <span class="ds-resistance-pills">
+        {{#each weaknesses}}
+          <span class="ds-pill ds-pill-weak">{{this.type}} {{this.value}}</span>
+        {{/each}}
+      </span>
+    </div>
+  {{/if}}
+</div>

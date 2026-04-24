@@ -1,0 +1,25 @@
+<div class="ds-stats-row">
+  <div class="ds-stat">
+    <div class="ds-stat-value">{{system.combat.size.value}}{{system.combat.size.letter}}</div>
+    <div class="ds-stat-label">Size</div>
+  </div>
+  <div class="ds-stat">
+    <div class="ds-stat-value">
+      {{system.movement.value}}
+      {{#if movementTypes.length}}<span class="ds-stat-sub">({{#each movementTypes}}{{this}}{{#unless @last}}, {{/unless}}{{/each}})</span>{{/if}}
+    </div>
+    <div class="ds-stat-label">Speed</div>
+  </div>
+  <div class="ds-stat ds-stat-clickable" data-action="editStamina" data-tooltip="Edit stamina">
+    <div class="ds-stat-value">{{system.stamina.value}}<span class="ds-stat-sub"> / {{system.stamina.max}}</span></div>
+    <div class="ds-stat-label">Stamina</div>
+  </div>
+  <div class="ds-stat">
+    <div class="ds-stat-value">{{system.combat.stability}}</div>
+    <div class="ds-stat-label">Stability</div>
+  </div>
+  <div class="ds-stat ds-stat-clickable" data-action="freeStrike" data-tooltip="Roll free strike">
+    <div class="ds-stat-value">{{system.monster.freeStrike}}</div>
+    <div class="ds-stat-label">Free Strike</div>
+  </div>
+</div>

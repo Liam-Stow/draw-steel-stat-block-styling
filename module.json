@@ -1,0 +1,37 @@
+{
+  "id": "draw-steel-stat-block-styling",
+  "title": "Draw Steel Stat Block Styling",
+  "description": "Renders Draw Steel NPCs as book-accurate monster stat blocks. Every element is clickable — abilities can be invoked, items edited, characteristics rolled.",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "Liam Stow",
+      "email": "stow.liam@gmail.com"
+    }
+  ],
+  "relationships": {
+    "systems": [
+      {
+        "id": "draw-steel",
+        "type": "system",
+        "compatibility": {
+          "minimum": "1.0.1",
+          "verified": "1.0.1"
+        }
+      }
+    ]
+  },
+  "esmodules": [
+    "scripts/module.js"
+  ],
+  "styles": [
+    "styles/statblock.css"
+  ],
+  "url": "https://github.com/liam-stow/draw-steel-stat-block-styling",
+  "manifest": "https://github.com/liam-stow/draw-steel-stat-block-styling/releases/latest/download/module.json",
+  "download": "https://github.com/liam-stow/draw-steel-stat-block-styling/releases/latest/download/module.zip"
+}

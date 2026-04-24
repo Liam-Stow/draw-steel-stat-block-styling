@@ -1,0 +1,22 @@
+<section class="ds-traits">
+  <h2 class="ds-section-title">Traits</h2>
+  {{#each features}}
+    <div class="ds-trait" data-item-id="{{this.id}}">
+      <div class="ds-trait-head">
+        <span class="ds-trait-name"
+              data-action="edit"
+              data-item-id="{{this.id}}"
+              data-tooltip="Open {{this.name}}">{{this.name}}</span>
+        <button type="button" class="ds-icon-btn"
+                data-action="edit"
+                data-item-id="{{this.id}}"
+                data-tooltip="Edit">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+      </div>
+      {{#if this.system.description.value}}
+        <div class="ds-trait-body">{{{this.system.description.value}}}</div>
+      {{/if}}
+    </div>
+  {{/each}}
+</section>

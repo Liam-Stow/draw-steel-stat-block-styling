@@ -1,0 +1,457 @@
+/* ============================================================
+ * Draw Steel Stat Block Styling
+ * All rules scoped under .draw-steel.statblock-sheet
+ * ============================================================ */
+
+.draw-steel.statblock-sheet {
+  --ds-bg: #f6efe1;
+  --ds-bg-alt: #efe4ce;
+  --ds-ink: #1c1410;
+  --ds-ink-muted: #5a4a3a;
+  --ds-accent: #7a1414;
+  --ds-accent-soft: #c9a86a;
+  --ds-rule: #8b6b3a;
+  --ds-tier-1: #b3b3b3;
+  --ds-tier-2: #c9a86a;
+  --ds-tier-3: #7a1414;
+  --ds-pill-immune: #2a6b2a;
+  --ds-pill-weak: #a14a1a;
+  --ds-serif: "Bookmania", "Book Antiqua", "Palatino Linotype", Palatino, Georgia, serif;
+  --ds-sans: "Signika", system-ui, sans-serif;
+}
+
+/* Dark-theme respect */
+@media (prefers-color-scheme: dark) {
+  .draw-steel.statblock-sheet {
+    --ds-bg: #1f1a15;
+    --ds-bg-alt: #2a221b;
+    --ds-ink: #f4ecdb;
+    --ds-ink-muted: #c6b89a;
+    --ds-accent: #d44a4a;
+    --ds-accent-soft: #c9a86a;
+    --ds-rule: #c9a86a;
+  }
+}
+
+.draw-steel.statblock-sheet .window-content {
+  background: var(--ds-bg);
+  color: var(--ds-ink);
+  padding: 0;
+  overflow: hidden;
+}
+
+.draw-steel.statblock-sheet .ds-statblock {
+  font-family: var(--ds-serif);
+  padding: 1rem 1.25rem 1.25rem;
+  line-height: 1.35;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+/* ============================================================
+ * Header
+ * ============================================================ */
+.ds-statblock .ds-header {
+  border-bottom: 2px solid var(--ds-rule);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.ds-statblock .ds-header-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.ds-statblock .ds-header-portrait {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--ds-rule);
+  object-fit: cover;
+  background: var(--ds-bg-alt);
+}
+.ds-statblock .ds-header-name {
+  flex: 1;
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ds-accent);
+  border: none;
+}
+.ds-statblock .ds-header-level {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ds-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.ds-statblock .ds-header-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.75rem;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ds-ink-muted);
+}
+.ds-statblock .ds-header-meta .ds-header-ev {
+  margin-left: auto;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--ds-accent);
+}
+
+/* ============================================================
+ * Stats row
+ * ============================================================ */
+.ds-statblock .ds-stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  background: var(--ds-bg-alt);
+  border-radius: 4px;
+}
+.ds-statblock .ds-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.25rem;
+  border-radius: 3px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+}
+.ds-statblock .ds-stat-clickable {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ds-statblock .ds-stat-clickable:hover {
+  background: color-mix(in srgb, var(--ds-accent) 12%, transparent);
+}
+.ds-statblock .ds-stat-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ds-ink);
+}
+.ds-statblock .ds-stat-sub {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--ds-ink-muted);
+}
+.ds-statblock .ds-stat-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ds-ink-muted);
+}
+
+/* ============================================================
+ * Characteristics row
+ * ============================================================ */
+.ds-statblock .ds-characteristics {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+.ds-statblock .ds-char {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.25rem;
+  background: var(--ds-bg);
+  border: 1px solid var(--ds-rule);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  transition: background 0.15s, transform 0.1s;
+}
+.ds-statblock .ds-char:hover {
+  background: color-mix(in srgb, var(--ds-accent) 10%, var(--ds-bg));
+}
+.ds-statblock .ds-char:active {
+  transform: translateY(1px);
+}
+.ds-statblock .ds-char-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ds-ink-muted);
+}
+.ds-statblock .ds-char-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ds-accent);
+}
+
+/* ============================================================
+ * Resistances
+ * ============================================================ */
+.ds-statblock .ds-resistances {
+  margin: 0.5rem 0;
+}
+.ds-statblock .ds-resistance-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.15rem 0;
+  font-size: 0.85rem;
+}
+.ds-statblock .ds-resistance-label {
+  font-weight: 700;
+  color: var(--ds-ink-muted);
+  min-width: 80px;
+}
+.ds-statblock .ds-pill {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  color: white;
+  text-transform: capitalize;
+}
+.ds-statblock .ds-pill-immune { background: var(--ds-pill-immune); }
+.ds-statblock .ds-pill-weak   { background: var(--ds-pill-weak); }
+
+/* ============================================================
+ * Divider (ornament)
+ * ============================================================ */
+.ds-statblock .ds-divider {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to right,
+    transparent 0%,
+    var(--ds-rule) 20%,
+    var(--ds-rule) 80%,
+    transparent 100%);
+  margin: 0.75rem 0;
+  position: relative;
+}
+.ds-statblock .ds-divider::after {
+  content: "✦";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ds-bg);
+  color: var(--ds-rule);
+  padding: 0 6px;
+  font-size: 0.8rem;
+}
+
+/* ============================================================
+ * Section titles
+ * ============================================================ */
+.ds-statblock .ds-section-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ds-accent);
+  margin: 0 0 0.35rem 0;
+  border-bottom: 1px solid var(--ds-rule);
+  padding-bottom: 0.15rem;
+}
+
+/* ============================================================
+ * Traits
+ * ============================================================ */
+.ds-statblock .ds-trait {
+  margin: 0.35rem 0;
+  padding: 0.25rem 0;
+}
+.ds-statblock .ds-trait-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+.ds-statblock .ds-trait-name {
+  font-weight: 700;
+  font-style: italic;
+  color: var(--ds-ink);
+  cursor: pointer;
+}
+.ds-statblock .ds-trait-name:hover { color: var(--ds-accent); }
+.ds-statblock .ds-trait-body {
+  margin-top: 0.15rem;
+  font-size: 0.9rem;
+  color: var(--ds-ink);
+}
+.ds-statblock .ds-trait-body p { margin: 0.25rem 0; }
+
+/* ============================================================
+ * Abilities
+ * ============================================================ */
+.ds-statblock .ds-ability {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.6rem;
+  background: var(--ds-bg-alt);
+  border-left: 4px solid var(--ds-accent);
+  border-radius: 3px;
+}
+.ds-statblock .ds-ability-type-maneuver  { border-left-color: #4a6b9b; }
+.ds-statblock .ds-ability-type-triggered { border-left-color: #9b6b4a; }
+.ds-statblock .ds-ability-type-free      { border-left-color: #7a7a7a; }
+.ds-statblock .ds-ability-type-villain   { border-left-color: #5a1a5a; }
+
+.ds-statblock .ds-ability-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+.ds-statblock .ds-ability-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  object-fit: cover;
+  background: var(--ds-bg);
+}
+.ds-statblock .ds-ability-title {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.ds-statblock .ds-ability-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ds-ink);
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+.ds-statblock .ds-ability-name:hover { color: var(--ds-accent); }
+.ds-statblock .ds-ability-type {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ds-ink-muted);
+  padding: 1px 6px;
+  border: 1px solid var(--ds-ink-muted);
+  border-radius: 3px;
+}
+.ds-statblock .ds-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ds-ink-muted);
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+.ds-statblock .ds-icon-btn:hover {
+  color: var(--ds-accent);
+  background: color-mix(in srgb, var(--ds-accent) 10%, transparent);
+}
+.ds-statblock .ds-ability-keywords {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--ds-ink-muted);
+  margin-bottom: 0.25rem;
+}
+.ds-statblock .ds-ability-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  margin: 0.25rem 0;
+  padding: 0.25rem 0;
+  border-top: 1px dotted var(--ds-rule);
+  border-bottom: 1px dotted var(--ds-rule);
+}
+.ds-statblock .ds-meta-col {
+  display: flex;
+  flex-direction: column;
+}
+.ds-statblock .ds-meta-col-wide { flex: 1; }
+.ds-statblock .ds-meta-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ds-ink-muted);
+}
+.ds-statblock .ds-meta-value {
+  font-weight: 600;
+  color: var(--ds-ink);
+  text-transform: capitalize;
+}
+.ds-statblock .ds-ability-effect {
+  font-size: 0.88rem;
+  margin: 0.25rem 0;
+}
+.ds-statblock .ds-ability-effect p { margin: 0.2rem 0; }
+
+.ds-statblock .ds-power-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin: 0.35rem 0;
+  padding: 0.3rem 0.5rem;
+  background: var(--ds-bg);
+  border: 1px solid var(--ds-rule);
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ds-accent);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.ds-statblock .ds-power-row:hover {
+  background: color-mix(in srgb, var(--ds-accent) 10%, var(--ds-bg));
+}
+.ds-statblock .ds-power-char {
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--ds-ink-muted);
+  text-transform: capitalize;
+}
+
+.ds-statblock .ds-tiers {
+  list-style: none;
+  padding: 0;
+  margin: 0.35rem 0;
+}
+.ds-statblock .ds-tier {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.2rem 0.35rem;
+  margin: 0.15rem 0;
+  font-size: 0.88rem;
+  border-left: 3px solid var(--ds-tier-1);
+  background: var(--ds-bg);
+}
+.ds-statblock .ds-tier-1 { border-left-color: var(--ds-tier-1); }
+.ds-statblock .ds-tier-2 { border-left-color: var(--ds-tier-2); }
+.ds-statblock .ds-tier-3 { border-left-color: var(--ds-tier-3); }
+.ds-statblock .ds-tier-range {
+  font-weight: 700;
+  color: var(--ds-ink-muted);
+  text-align: center;
+}
+.ds-statblock .ds-tier-text {
+  color: var(--ds-ink);
+}
+
+.ds-statblock .ds-ability-spend {
+  margin-top: 0.35rem;
+  padding-top: 0.25rem;
+  border-top: 1px dotted var(--ds-rule);
+  font-size: 0.85rem;
+  font-style: italic;
+}
