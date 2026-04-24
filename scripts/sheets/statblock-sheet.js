@@ -54,23 +54,42 @@ export function createStatBlockSheet(ParentSheet) {
 
     _prepareAbility(item) {
       const sys = item.system;
-      const tiers = [];
+
+      // Aggregate text from all effects per tier (multiple effects can contribute to one tier row).
+      const tierTexts = { 1: [], 2: [], 3: [] };
       if (sys.power?.effects) {
-        for (const [k, eff] of sys.power.effects.entries?.() ?? Object.entries(sys.power.effects)) {
-          // Collect each tier result in order
+        const effects = sys.power.effects;
+        const effectList = (effects instanceof Map || typeof effects.values === "function")
+          ? Array.from(effects.values())
+          : Object.values(effects);
+        for (const eff of effectList) {
           for (const tier of [1, 2, 3]) {
-            const key = `tier${tier}`;
-            const val = eff?.[key];
-            if (val && (val.damage || val.formula || val.description || val.value)) {
-              tiers.push({
-                tier,
-                rangeLabel: tier === 1 ? "≤11" : tier === 2 ? "12–16" : "17+",
-                text: this._formatTier(val),
-              });
+            let text = "";
+            // Prefer the system's own toText method — matches exactly what the item sheet shows.
+            try {
+              if (typeof eff.toText === "function") text = eff.toText(tier) ?? "";
+            } catch (_) { /* fall through to manual format */ }
+
+            // Manual fallback: tier data lives at eff[TYPE]["tier1/2/3"]
+            if (!text) {
+              const effectType = eff.constructor?.TYPE ?? eff.type;
+              const td = effectType ? eff[effectType]?.[`tier${tier}`] : null;
+              if (td) text = this._formatEffectTier(td, effectType);
             }
+
+            if (text) tierTexts[tier].push(text);
+            else console.debug("[ds-statblock] no tier text for", item.name, "tier", tier, eff);
           }
         }
       }
+
+      const tiers = [1, 2, 3]
+        .map(tier => ({
+          tier,
+          rangeLabel: tier === 1 ? "≤11" : tier === 2 ? "12–16" : "17+",
+          text: tierTexts[tier].join("; "),
+        }))
+        .filter(t => t.text);
 
       return {
         id: item.id,
@@ -141,15 +160,26 @@ export function createStatBlockSheet(ParentSheet) {
       return `${qty} ${kind}`;
     }
 
-    _formatTier(val) {
-      if (!val) return "";
-      if (typeof val === "string") return val;
-      const parts = [];
-      if (val.damage?.value) parts.push(`${val.damage.value}${val.damage.type ? ` ${val.damage.type}` : ""} damage`);
-      else if (val.formula) parts.push(val.formula);
-      if (val.description) parts.push(val.description);
-      if (val.value && !parts.length) parts.push(String(val.value));
-      return parts.filter(Boolean).join("; ");
+    _formatEffectTier(td, effectType) {
+      if (!td) return "";
+
+      // Other / Applied / Forced / Resource — all expose a .display string at the tier level.
+      if (td.display) return td.display;
+
+      // Damage: td.value (formula) + td.types (Set<string>)
+      if (effectType === "damage" && td.value != null && td.value !== "") {
+        const types = td.types instanceof Set
+          ? Array.from(td.types).join("/")
+          : Array.isArray(td.types) ? td.types.join("/") : "";
+        return `${td.value}${types ? " " + types : ""} damage`;
+      }
+
+      // Resource fallback (amount + type)
+      if (td.amount != null) {
+        return `${td.amount}${td.type ? " " + td.type : ""}`;
+      }
+
+      return "";
     }
 
     async _onUseAbility(event, target) {
