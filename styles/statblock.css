@@ -46,6 +46,8 @@
   line-height: 1.35;
   overflow-y: auto;
   max-height: 100%;
+  container-type: inline-size;
+  container-name: statblock;
 }
 
 /* ============================================================
@@ -270,6 +272,7 @@
   border: none;
   margin: 0.5rem 0 0;
   padding: 0;
+  break-inside: avoid;
 }
 .ds-statblock .ds-ability-group > summary {
   /* Reset browser defaults */
@@ -492,4 +495,29 @@
   border-top: 1px dotted var(--ds-rule);
   font-size: 0.85rem;
   font-style: italic;
+}
+
+/* ============================================================
+ * Multi-column layout (container-query driven)
+ * Traits and abilities share the same column flow.
+ * display:contents on the inner wrappers makes their <details>
+ * children participate directly in the column layout.
+ * ============================================================ */
+.ds-statblock .ds-columns > .ds-traits,
+.ds-statblock .ds-columns > .ds-abilities {
+  display: contents;
+}
+
+@container statblock (min-width: 720px) {
+  .ds-statblock .ds-columns {
+    columns: 2;
+    column-gap: 1.5rem;
+    column-rule: 1px solid var(--ds-rule);
+  }
+}
+
+@container statblock (min-width: 1080px) {
+  .ds-statblock .ds-columns {
+    columns: 3;
+  }
 }
