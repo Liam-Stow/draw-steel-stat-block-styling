@@ -499,9 +499,6 @@
 
 /* ============================================================
  * Multi-column layout (container-query driven)
- * Traits and abilities share the same column flow.
- * display:contents on the inner wrappers makes their <details>
- * children participate directly in the column layout.
  * ============================================================ */
 .ds-statblock .ds-columns > .ds-traits,
 .ds-statblock .ds-columns > .ds-abilities {
