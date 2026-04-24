@@ -264,6 +264,41 @@
 }
 
 /* ============================================================
+ * Ability groups (collapsible)
+ * ============================================================ */
+.ds-statblock .ds-ability-group {
+  border: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+}
+.ds-statblock .ds-ability-group > summary {
+  /* Reset browser defaults */
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  user-select: none;
+  /* Inherit section-title appearance */
+  margin-bottom: 0.35rem;
+}
+.ds-statblock .ds-ability-group > summary::-webkit-details-marker,
+.ds-statblock .ds-ability-group > summary::marker {
+  display: none;
+}
+.ds-statblock .ds-group-chevron {
+  font-size: 0.75rem;
+  transition: transform 0.18s ease;
+  flex-shrink: 0;
+}
+.ds-statblock .ds-ability-group:not([open]) > summary .ds-group-chevron {
+  transform: rotate(-90deg);
+}
+.ds-statblock .ds-ability-group > summary:hover {
+  color: color-mix(in srgb, var(--ds-accent) 70%, var(--ds-ink));
+}
+
+/* ============================================================
  * Traits
  * ============================================================ */
 .ds-statblock .ds-trait {

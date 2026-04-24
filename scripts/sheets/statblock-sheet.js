@@ -31,9 +31,35 @@ export function createStatBlockSheet(ParentSheet) {
       ctx.actor = this.actor;
       ctx.system = system;
 
-      ctx.abilities = this.actor.items
+      const allAbilities = this.actor.items
         .filter(i => i.type === "ability")
         .map(i => this._prepareAbility(i));
+
+      ctx.abilities = allAbilities;
+
+      // Preferred display order for known types; unknown types appear after, sorted.
+      const TYPE_ORDER = ["main", "maneuver", "triggered", "freeTriggered", "free", "none", "villain"];
+      const TYPE_LABELS = {
+        main: "Main Actions",
+        maneuver: "Maneuvers",
+        triggered: "Triggered Actions",
+        freeTriggered: "Triggered Free Actions",
+        free: "Free Actions",
+        none: "No Action",
+        villain: "Villain Actions",
+      };
+
+      const presentTypes = [...new Set(allAbilities.map(a => a.type))];
+      const sortedTypes = [
+        ...TYPE_ORDER.filter(t => presentTypes.includes(t)),
+        ...presentTypes.filter(t => !TYPE_ORDER.includes(t)).sort(),
+      ];
+
+      ctx.abilityGroups = sortedTypes.map(type => ({
+        type,
+        label: TYPE_LABELS[type] ?? (type.charAt(0).toUpperCase() + type.slice(1)),
+        abilities: allAbilities.filter(a => a.type === type),
+      }));
 
       ctx.features = this.actor.items.filter(i => i.type === "feature");
 
@@ -95,8 +121,8 @@ export function createStatBlockSheet(ParentSheet) {
         id: item.id,
         name: item.name,
         img: item.img,
-        type: sys.type,
-        typeLabel: this._abilityTypeLabel(sys.type),
+        type: this._normalizeAbilityType(sys.type),
+        typeLabel: this._abilityTypeLabel(this._normalizeAbilityType(sys.type)),
         keywords: this._formatSet(sys.keywords),
         distance: this._formatDistance(sys.distance),
         target: this._formatTarget(sys.target),
@@ -112,13 +138,18 @@ export function createStatBlockSheet(ParentSheet) {
       };
     }
 
+    _normalizeAbilityType(type) {
+      return type === "action" ? "main" : (type ?? "main");
+    }
+
     _abilityTypeLabel(type) {
       const map = {
-        action: "Action",
+        main: "Main",
         maneuver: "Maneuver",
-        triggered: "Triggered Action",
-        free: "Free Action",
-        villain: "Villain Action",
+        triggered: "Triggered",
+        freetriggered: "Triggered Free",
+        free: "Free",
+        villain: "Villain",
       };
       return map[type] ?? type ?? "";
     }
