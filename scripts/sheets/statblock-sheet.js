@@ -23,6 +23,18 @@ export function createStatBlockSheet(ParentSheet) {
       },
     };
 
+    static TYPE_ORDER = ["main", "maneuver", "triggered", "freeTriggered", "free", "none", "villain"];
+
+    static TYPE_LABELS = {
+      main: "Main Actions",
+      maneuver: "Maneuvers",
+      triggered: "Triggered Actions",
+      freeTriggered: "Triggered Free Actions",
+      free: "Free Actions",
+      none: "No Action",
+      villain: "Villain Actions",
+    };
+
     async _prepareContext(options) {
       const ctx = await super._prepareContext(options);
       const system = this.actor.system;
@@ -31,37 +43,35 @@ export function createStatBlockSheet(ParentSheet) {
       ctx.actor = this.actor;
       ctx.system = system;
 
-      const allAbilities = this.actor.items
-        .filter(i => i.type === "ability")
-        .map(i => this._prepareAbility(i));
+      // Single pass: partition items into abilities and features simultaneously.
+      const allAbilities = [];
+      const features = [];
+      for (const item of this.actor.items) {
+        if (item.type === "ability") allAbilities.push(this._prepareAbility(item));
+        else if (item.type === "feature") features.push(item);
+      }
 
       ctx.abilities = allAbilities;
+      ctx.features = features;
 
-      // Preferred display order for known types; unknown types appear after, sorted.
-      const TYPE_ORDER = ["main", "maneuver", "triggered", "freeTriggered", "free", "none", "villain"];
-      const TYPE_LABELS = {
-        main: "Main Actions",
-        maneuver: "Maneuvers",
-        triggered: "Triggered Actions",
-        freeTriggered: "Triggered Free Actions",
-        free: "Free Actions",
-        none: "No Action",
-        villain: "Villain Actions",
-      };
+      // Group abilities by type in a single pass via a bucket Map.
+      const { TYPE_ORDER, TYPE_LABELS } = this.constructor;
+      const typeOrderSet = new Set(TYPE_ORDER);
+      const buckets = new Map();
+      for (const ability of allAbilities) {
+        let bucket = buckets.get(ability.type);
+        if (!bucket) { bucket = []; buckets.set(ability.type, bucket); }
+        bucket.push(ability);
+      }
 
-      const presentTypes = [...new Set(allAbilities.map(a => a.type))];
-      const sortedTypes = [
-        ...TYPE_ORDER.filter(t => presentTypes.includes(t)),
-        ...presentTypes.filter(t => !TYPE_ORDER.includes(t)).sort(),
-      ];
+      const knownTypes = TYPE_ORDER.filter(t => buckets.has(t));
+      const unknownTypes = [...buckets.keys()].filter(t => !typeOrderSet.has(t)).sort();
 
-      ctx.abilityGroups = sortedTypes.map(type => ({
+      ctx.abilityGroups = [...knownTypes, ...unknownTypes].map(type => ({
         type,
         label: TYPE_LABELS[type] ?? (type.charAt(0).toUpperCase() + type.slice(1)),
-        abilities: allAbilities.filter(a => a.type === type),
+        abilities: buckets.get(type),
       }));
-
-      ctx.features = this.actor.items.filter(i => i.type === "feature");
 
       ctx.immunities = this._formatResistances(system.damage?.immunities);
       ctx.weaknesses = this._formatResistances(system.damage?.weaknesses);
@@ -72,7 +82,6 @@ export function createStatBlockSheet(ParentSheet) {
       });
 
       ctx.movementTypes = Array.from(system.movement?.types ?? []);
-      ctx.keywordList  = Array.from(system.monster?.keywords?.list ?? []);
       ctx.keywordLabels = system.monster?.keywords?.labels ?? "";
 
       return ctx;
@@ -80,6 +89,7 @@ export function createStatBlockSheet(ParentSheet) {
 
     _prepareAbility(item) {
       const sys = item.system;
+      const normalizedType = this._normalizeAbilityType(sys.type);
 
       // Aggregate text from all effects per tier (multiple effects can contribute to one tier row).
       const tierTexts = { 1: [], 2: [], 3: [] };
@@ -94,7 +104,9 @@ export function createStatBlockSheet(ParentSheet) {
             // Prefer the system's own toText method — matches exactly what the item sheet shows.
             try {
               if (typeof eff.toText === "function") text = eff.toText(tier) ?? "";
-            } catch (_) { /* fall through to manual format */ }
+            } catch (e) {
+              console.warn("[ds-statblock] toText threw for", item.name, "tier", tier, e);
+            }
 
             // Manual fallback: tier data lives at eff[TYPE]["tier1/2/3"]
             if (!text) {
@@ -121,8 +133,8 @@ export function createStatBlockSheet(ParentSheet) {
         id: item.id,
         name: item.name,
         img: item.img,
-        type: this._normalizeAbilityType(sys.type),
-        typeLabel: this._abilityTypeLabel(this._normalizeAbilityType(sys.type)),
+        type: normalizedType,
+        typeLabel: this._abilityTypeLabel(normalizedType),
         keywords: this._formatSet(sys.keywords),
         distance: this._formatDistance(sys.distance),
         target: this._formatTarget(sys.target),
@@ -147,7 +159,7 @@ export function createStatBlockSheet(ParentSheet) {
         main: "Main",
         maneuver: "Maneuver",
         triggered: "Triggered",
-        freetriggered: "Triggered Free",
+        freeTriggered: "Triggered Free",
         free: "Free",
         villain: "Villain",
       };
@@ -177,7 +189,7 @@ export function createStatBlockSheet(ParentSheet) {
     _formatDistance(d) {
       if (!d) return "";
       const parts = [];
-      if (d.type) parts.push(d.type);
+      if (d.type && d.type !== "") parts.push(d.type);
       if (d.primary != null && d.primary !== "") parts.push(d.primary);
       if (d.secondary != null && d.secondary !== "") parts.push(`× ${d.secondary}`);
       return parts.join(" ");
@@ -213,17 +225,20 @@ export function createStatBlockSheet(ParentSheet) {
       return "";
     }
 
+    _getItemFromTarget(target) {
+      const id = target.dataset.itemId ?? target.closest("[data-item-id]")?.dataset.itemId;
+      return this.actor.items.get(id) ?? null;
+    }
+
     async _onUseAbility(event, target) {
-      const itemId = target.dataset.itemId ?? target.closest("[data-item-id]")?.dataset.itemId;
-      const item = this.actor.items.get(itemId);
+      const item = this._getItemFromTarget(target);
       if (!item) return;
       if (typeof item.roll === "function") await item.roll();
       else if (typeof item.use === "function") await item.use();
     }
 
     async _onEditItem(event, target) {
-      const itemId = target.dataset.itemId ?? target.closest("[data-item-id]")?.dataset.itemId;
-      const item = this.actor.items.get(itemId);
+      const item = this._getItemFromTarget(target);
       item?.sheet.render(true);
     }
 
