@@ -340,6 +340,7 @@
 .ds-statblock .ds-ability-type-maneuver  { border-left-color: #4a6b9b; }
 .ds-statblock .ds-ability-type-triggered { border-left-color: #9b6b4a; }
 .ds-statblock .ds-ability-type-free      { border-left-color: #7a7a7a; }
+.ds-statblock .ds-ability-type-malice    { border-left-color: #9b7a1a; }
 .ds-statblock .ds-ability-type-villain   { border-left-color: #5a1a5a; }
 
 .ds-statblock .ds-ability-head {

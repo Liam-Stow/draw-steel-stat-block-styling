@@ -26,7 +26,7 @@ export function createStatBlockSheet(ParentSheet) {
       },
     };
 
-    static TYPE_ORDER = ["main", "maneuver", "triggered", "freeTriggered", "free", "none", "villain"];
+    static TYPE_ORDER = ["main", "maneuver", "triggered", "freeTriggered", "free", "none", "malice", "villain"];
 
     static TYPE_LABELS = {
       main: "Main Actions",
@@ -35,6 +35,7 @@ export function createStatBlockSheet(ParentSheet) {
       freeTriggered: "Triggered Free Actions",
       free: "Free Actions",
       none: "No Action",
+      malice: "Malice Actions",
       villain: "Villain Actions",
     };
 
@@ -110,7 +111,8 @@ export function createStatBlockSheet(ParentSheet) {
 
     _prepareAbility(item) {
       const sys = item.system;
-      const normalizedType = this._normalizeAbilityType(sys.type);
+      const baseType = this._normalizeAbilityType(sys.type);
+      const normalizedType = (sys.resource > 0 && baseType === "none") ? "malice" : baseType;
 
       // Aggregate text from all effects per tier (multiple effects can contribute to one tier row).
       const tierTexts = { 1: [], 2: [], 3: [] };
@@ -183,6 +185,7 @@ export function createStatBlockSheet(ParentSheet) {
         triggered: "Triggered",
         freeTriggered: "Triggered Free",
         free: "Free",
+        malice: "Malice",
         villain: "Villain",
       };
       return map[type] ?? type ?? "";
