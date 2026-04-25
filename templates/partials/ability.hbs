@@ -6,7 +6,8 @@
               data-action="useAbility"
               data-item-id="{{id}}"
               data-tooltip="Use {{name}}">{{name}}</button>
-      <span class="ds-ability-type">{{typeLabel}}</span>
+      {{#if isSignature}}<span class="ds-signature-badge" data-tooltip="Signature Ability">★</span>{{/if}}
+      {{#if resource}}<span class="ds-malice-cost" data-tooltip="Malice Cost">{{resource}} Malice</span>{{/if}}
     </div>
     <button type="button" class="ds-icon-btn"
             data-action="edit"

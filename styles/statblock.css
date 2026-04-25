@@ -374,15 +374,22 @@
   text-align: left;
 }
 .ds-statblock .ds-ability-name:hover { color: var(--ds-accent); }
-.ds-statblock .ds-ability-type {
+.ds-statblock .ds-signature-badge {
+  color: var(--ds-accent);
+  font-size: 0.85rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.ds-statblock .ds-malice-cost {
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--ds-ink-muted);
-  padding: 1px 6px;
-  border: 1px solid var(--ds-ink-muted);
+  letter-spacing: 0.05em;
+  color: #9b7a1a;
+  padding: 1px 5px;
+  border: 1px solid #9b7a1a;
   border-radius: 3px;
+  flex-shrink: 0;
 }
 .ds-statblock .ds-icon-btn {
   background: transparent;
