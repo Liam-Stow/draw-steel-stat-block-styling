@@ -462,32 +462,29 @@
   text-transform: capitalize;
 }
 
-.ds-statblock .ds-tiers {
-  list-style: none;
+.ds-statblock dl.ds-power-roll-display {
+  gap: 4px;
   padding: 0;
   margin: 0.35rem 0;
 }
-.ds-statblock .ds-tier {
-  display: grid;
-  grid-template-columns: 72px 1fr;
-  gap: 0.5rem;
-  align-items: baseline;
-  padding: 0.2rem 0.35rem;
-  margin: 0.15rem 0;
+.ds-statblock dl.ds-power-roll-display dt {
+  font-family: "Draw Steel Glyphs";
+  font-size: var(--font-size-24);
+  font-weight: 500;
+  line-height: 0.9;
+}
+.ds-statblock dl.ds-power-roll-display dd {
+  margin: 0;
   font-size: 0.88rem;
-  border-left: 3px solid var(--ds-tier-1);
-  background: var(--ds-bg);
-}
-.ds-statblock .ds-tier-1 { border-left-color: var(--ds-tier-1); }
-.ds-statblock .ds-tier-2 { border-left-color: var(--ds-tier-2); }
-.ds-statblock .ds-tier-3 { border-left-color: var(--ds-tier-3); }
-.ds-statblock .ds-tier-range {
-  font-weight: 700;
-  color: var(--ds-ink-muted);
-  text-align: center;
-}
-.ds-statblock .ds-tier-text {
   color: var(--ds-ink);
+}
+.ds-statblock dl.ds-power-roll-display dd > p,
+.ds-statblock dl.ds-power-roll-display dt > p { margin: 0; }
+.ds-statblock dl.ds-power-roll-display span.potency {
+  font-family: "Draw Steel Glyphs";
+  font-size: var(--font-size-16);
+  text-transform: lowercase;
+  line-height: 0.9;
 }
 
 .ds-statblock .ds-ability-spend {

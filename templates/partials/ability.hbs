@@ -40,14 +40,11 @@
     </button>
   {{/if}}
   {{#if hasTiers}}
-    <ol class="ds-tiers">
-      {{#each tiers}}
-        <li class="ds-tier ds-tier-{{this.tier}}">
-          <span class="ds-tier-range">{{this.rangeLabel}}</span>
-          <span class="ds-tier-text">{{{this.text}}}</span>
-        </li>
-      {{/each}}
-    </ol>
+    <dl class="ds-power-roll-display">
+      {{#if tier1Text}}<dt class="tier1">!</dt><dd class="tier1">{{{tier1Text}}}</dd>{{/if}}
+      {{#if tier2Text}}<dt class="tier2">@</dt><dd class="tier2">{{{tier2Text}}}</dd>{{/if}}
+      {{#if tier3Text}}<dt class="tier3">#</dt><dd class="tier3">{{{tier3Text}}}</dd>{{/if}}
+    </dl>
   {{/if}}
 
   {{#if effectAfter}}
