@@ -1,3 +1,16 @@
+export const ABILITY_TYPES = [
+  { key: "main",          groupLabel: "Main Actions",           shortLabel: "Main"          },
+  { key: "maneuver",      groupLabel: "Maneuvers",              shortLabel: "Maneuver"       },
+  { key: "triggered",     groupLabel: "Triggered Actions",      shortLabel: "Triggered"      },
+  { key: "freeTriggered", groupLabel: "Triggered Free Actions", shortLabel: "Triggered Free" },
+  { key: "free",          groupLabel: "Free Actions",           shortLabel: "Free"           },
+  { key: "none",          groupLabel: "No Action",              shortLabel: ""               },
+  { key: "malice",        groupLabel: "Malice Actions",         shortLabel: "Malice"         },
+  { key: "villain",       groupLabel: "Villain Actions",        shortLabel: "Villain"        },
+];
+
+const ABILITY_TYPE_MAP = new Map(ABILITY_TYPES.map(t => [t.key, t]));
+
 /**
  * Factory that returns a sheet class extending the Draw Steel system's NPC sheet.
  * We build it lazily inside the `ready` hook so `game.system.api` is populated.
@@ -24,19 +37,6 @@ export function createStatBlockSheet(ParentSheet) {
         template: "modules/draw-steel-stat-block-styling/templates/statblock.hbs",
         scrollable: [""],
       },
-    };
-
-    static TYPE_ORDER = ["main", "maneuver", "triggered", "freeTriggered", "free", "none", "malice", "villain"];
-
-    static TYPE_LABELS = {
-      main: "Main Actions",
-      maneuver: "Maneuvers",
-      triggered: "Triggered Actions",
-      freeTriggered: "Triggered Free Actions",
-      free: "Free Actions",
-      none: "No Action",
-      malice: "Malice Actions",
-      villain: "Villain Actions",
     };
 
     async _prepareContext(options) {
@@ -77,8 +77,6 @@ export function createStatBlockSheet(ParentSheet) {
       })));
 
       // Group abilities by type in a single pass via a bucket Map.
-      const { TYPE_ORDER, TYPE_LABELS } = this.constructor;
-      const typeOrderSet = new Set(TYPE_ORDER);
       const buckets = new Map();
       for (const ability of allAbilities) {
         let bucket = buckets.get(ability.type);
@@ -86,12 +84,14 @@ export function createStatBlockSheet(ParentSheet) {
         bucket.push(ability);
       }
 
-      const knownTypes = TYPE_ORDER.filter(t => buckets.has(t));
-      const unknownTypes = [...buckets.keys()].filter(t => !typeOrderSet.has(t)).sort();
+      const typeKeys = ABILITY_TYPES.map(t => t.key);
+      const typeKeySet = new Set(typeKeys);
+      const knownTypes = typeKeys.filter(t => buckets.has(t));
+      const unknownTypes = [...buckets.keys()].filter(t => !typeKeySet.has(t)).sort();
 
       ctx.abilityGroups = [...knownTypes, ...unknownTypes].map(type => ({
         type,
-        label: TYPE_LABELS[type] ?? (type.charAt(0).toUpperCase() + type.slice(1)),
+        label: ABILITY_TYPE_MAP.get(type)?.groupLabel ?? (type.charAt(0).toUpperCase() + type.slice(1)),
         abilities: buckets.get(type),
       }));
 
@@ -157,7 +157,7 @@ export function createStatBlockSheet(ParentSheet) {
         name: item.name,
         img: item.img,
         type: normalizedType,
-        typeLabel: this._abilityTypeLabel(normalizedType),
+        typeLabel: ABILITY_TYPE_MAP.get(normalizedType)?.shortLabel ?? normalizedType ?? "",
         keywords: this._formatSet(sys.keywords),
         distance: this._formatDistance(sys.distance),
         target: this._formatTarget(sys.target),
@@ -176,19 +176,6 @@ export function createStatBlockSheet(ParentSheet) {
 
     _normalizeAbilityType(type) {
       return type === "action" ? "main" : (type ?? "main");
-    }
-
-    _abilityTypeLabel(type) {
-      const map = {
-        main: "Main",
-        maneuver: "Maneuver",
-        triggered: "Triggered",
-        freeTriggered: "Triggered Free",
-        free: "Free",
-        malice: "Malice",
-        villain: "Villain",
-      };
-      return map[type] ?? type ?? "";
     }
 
     _formatResistances(map) {
