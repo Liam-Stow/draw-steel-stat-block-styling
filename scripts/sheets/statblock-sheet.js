@@ -159,7 +159,7 @@ export function createStatBlockSheet(ParentSheet) {
         type: normalizedType,
         typeLabel: ABILITY_TYPE_MAP.get(normalizedType)?.shortLabel ?? normalizedType ?? "",
         keywords: this._formatSet(sys.keywords),
-        distance: this._formatDistance(sys.distance),
+        distance: item.system.formattedLabels?.distance ?? "",
         target: this._formatTarget(sys.target),
         trigger: sys.trigger,
         rollEnabled: !!sys.power?.roll?.enabled,
@@ -196,15 +196,6 @@ export function createStatBlockSheet(ParentSheet) {
     _formatSigned(v) {
       const n = Number(v) || 0;
       return n >= 0 ? `+${n}` : `${n}`;
-    }
-
-    _formatDistance(d) {
-      if (!d) return "";
-      const parts = [];
-      if (d.type && d.type !== "") parts.push(d.type);
-      if (d.primary != null && d.primary !== "") parts.push(d.primary);
-      if (d.secondary != null && d.secondary !== "") parts.push(`× ${d.secondary}`);
-      return parts.join(" ");
     }
 
     _formatTarget(t) {
