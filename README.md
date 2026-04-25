@@ -1,10 +1,9 @@
 # Draw Steel Stat Block Styling
 
-A Foundry VTT v14 module for the [Draw Steel](https://foundryvtt.com/packages/draw-steel)
-system (v1.0.1+) that renders NPC actor sheets as **book-accurate monster stat blocks**.
-
-Inspired by the [SteelCompendium/draw-steel-elements](https://github.com/SteelCompendium/draw-steel-elements)
-Obsidian plugin.
+A Foundry VTT module for the [Draw Steel](https://foundryvtt.com/packages/draw-steel)
+system that renders NPC actor sheets in a style similar to the official books.
+<img width="523" height="609" alt="image" src="https://github.com/user-attachments/assets/e9a86492-048f-4471-bf9d-8f48ac738fbf" />
+<img width="1373" height="697" alt="image" src="https://github.com/user-attachments/assets/7b194dc9-5c66-42c6-a999-370572ededbf" />
 
 ## Features
 
