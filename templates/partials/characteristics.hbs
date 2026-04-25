@@ -4,9 +4,9 @@
             data-action="roll"
             data-roll-type="characteristic"
             data-characteristic="{{this.key}}"
-            data-tooltip="Roll {{this.key}}">
-      <div class="ds-char-label">{{this.label}}</div>
-      <div class="ds-char-value">{{this.formatted}}</div>
+            data-tooltip="Roll {{this.label}}">
+      <span class="ds-char-key">{{this.rollKey}}</span>
+      <span class="ds-char-value">{{this.formatted}}</span>
     </button>
   {{/each}}
 </div>

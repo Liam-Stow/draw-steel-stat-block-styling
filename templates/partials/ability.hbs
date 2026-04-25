@@ -5,7 +5,7 @@
       <button type="button" class="ds-ability-name"
               data-action="useAbility"
               data-item-id="{{id}}"
-              data-tooltip="Use {{name}}">{{name}}</button>
+              data-tooltip="Use {{name}}">{{name}}{{#if rollEnabled}} <span class="ds-ability-formula">2d10 {{characteristicValue}}{{#if characteristicKey}} ({{characteristicKey}}){{/if}}</span>{{/if}}</button>
       {{#if isSignature}}<span class="ds-signature-badge" data-tooltip="Signature Ability">★</span>{{/if}}
       {{#if resource}}<span class="ds-malice-cost" data-tooltip="Malice Cost">{{resource}} Malice</span>{{/if}}
     </div>
@@ -31,15 +31,6 @@
     <div class="ds-ability-effect">{{{effectBefore}}}</div>
   {{/if}}
 
-  {{#if rollEnabled}}
-    <button type="button" class="ds-power-row"
-            data-action="useAbility"
-            data-item-id="{{id}}"
-            data-tooltip="Roll power (2d10 + {{characteristicKey}})">
-      <span class="ds-power-formula">2d10 {{characteristicValue}}</span>
-      {{#if characteristicKey}}<span class="ds-power-char">({{characteristicKey}})</span>{{/if}}
-    </button>
-  {{/if}}
   {{#if hasTiers}}
     <dl class="ds-power-roll-display">
       {{#if tier1Text}}<dt class="tier1">!</dt><dd class="tier1">{{{tier1Text}}}</dd>{{/if}}

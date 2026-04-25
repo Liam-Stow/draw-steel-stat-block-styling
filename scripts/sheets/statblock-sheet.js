@@ -100,7 +100,13 @@ export function createStatBlockSheet(ParentSheet) {
 
       ctx.characteristics = ["might", "agility", "reason", "intuition", "presence"].map(key => {
         const v = system.characteristics?.[key]?.value ?? 0;
-        return { key, label: key.charAt(0).toUpperCase() + key.slice(1, 3), value: v, formatted: this._formatSigned(v) };
+        return {
+          key,
+          rollKey: key.charAt(0).toUpperCase(),
+          label: key.charAt(0).toUpperCase() + key.slice(1),
+          value: v,
+          formatted: this._formatSigned(v),
+        };
       });
 
       ctx.movementTypes = Array.from(system.movement?.types ?? []);

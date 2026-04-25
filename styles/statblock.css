@@ -33,6 +33,11 @@
   }
 }
 
+/* Override the system actor sheet's 605px floor so stat blocks can shrink. */
+.draw-steel.statblock-sheet:not(.minimizing, .maximizing, .minimized) {
+  min-width: 320px;
+}
+
 .draw-steel.statblock-sheet .window-content {
   background: var(--ds-bg);
   color: var(--ds-ink);
@@ -42,8 +47,8 @@
 
 .draw-steel.statblock-sheet .ds-statblock {
   font-family: var(--ds-serif);
-  padding: 1rem 1.25rem 1.25rem;
-  line-height: 1.35;
+  padding: 0.5rem 0.75rem 0.6rem;
+  line-height: 1.25;
   overflow-y: auto;
   max-height: 100%;
   container-type: inline-size;
@@ -54,34 +59,25 @@
  * Header
  * ============================================================ */
 .ds-statblock .ds-header {
-  border-bottom: 2px solid var(--ds-rule);
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.5rem;
+  padding-bottom: 0.15rem;
+  margin-bottom: 0.15rem;
 }
 .ds-statblock .ds-header-top {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-}
-.ds-statblock .ds-header-portrait {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid var(--ds-rule);
-  object-fit: cover;
-  background: var(--ds-bg-alt);
+  gap: 0.6rem;
 }
 .ds-statblock .ds-header-name {
   flex: 1;
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   color: var(--ds-accent);
   border: none;
 }
 .ds-statblock .ds-header-level {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--ds-ink-muted);
   text-transform: uppercase;
@@ -90,9 +86,9 @@
 .ds-statblock .ds-header-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 0.75rem;
-  margin-top: 0.25rem;
-  font-size: 0.85rem;
+  gap: 0 0.6rem;
+  margin-top: 0.05rem;
+  font-size: 0.75rem;
   font-style: italic;
   color: var(--ds-ink-muted);
 }
@@ -109,18 +105,17 @@
 .ds-statblock .ds-stats-row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 0.5rem;
-  margin: 0.5rem 0;
-  padding: 0.5rem;
+  gap: 0.25rem;
+  margin: 0.15rem 0;
   background: var(--ds-bg-alt);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 .ds-statblock .ds-stat {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0.25rem;
+  padding: 0;
   border-radius: 3px;
   border: none;
   background: transparent;
@@ -135,7 +130,7 @@
   background: color-mix(in srgb, var(--ds-accent) 12%, transparent);
 }
 .ds-statblock .ds-stat-value {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--ds-ink);
 }
@@ -145,7 +140,7 @@
   color: var(--ds-ink-muted);
 }
 .ds-statblock .ds-stat-label {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--ds-ink-muted);
@@ -155,70 +150,78 @@
  * Characteristics row
  * ============================================================ */
 .ds-statblock .ds-characteristics {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0.5rem;
-  margin: 0.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.25rem;
+  margin: 0.15rem 0;
 }
 .ds-statblock .ds-char {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
   align-items: center;
+  gap: 0.3rem;
+  flex: 1;
   justify-content: center;
-  padding: 0.5rem 0.4rem;
+  padding: 0.1rem 0.25rem;
   height: auto;
-  min-height: 52px;
-  line-height: normal;
-  background: var(--ds-bg);
-  border: 1px solid var(--ds-rule);
-  border-radius: 6px;
+  line-height: 1;
+  background: transparent;
+  border: none;
   cursor: pointer;
   font-family: inherit;
   color: inherit;
   transition: background 0.15s, transform 0.1s;
+  border-radius: 3px;
 }
 .ds-statblock .ds-char:hover {
-  background: color-mix(in srgb, var(--ds-accent) 10%, var(--ds-bg));
+  background: color-mix(in srgb, var(--ds-accent) 10%, transparent);
 }
 .ds-statblock .ds-char:active {
   transform: translateY(1px);
 }
-.ds-statblock .ds-char-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--ds-ink-muted);
+.ds-statblock .ds-char-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.2em;
+  padding: 0.1em 0.3em;
+  background: var(--ds-accent);
+  color: var(--ds-bg);
+  border-radius: 2px;
+  font-family: "Draw Steel Glyphs", var(--ds-serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1;
 }
 .ds-statblock .ds-char-value {
-  font-size: 1.25rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  color: var(--ds-accent);
+  color: var(--ds-ink);
 }
 
 /* ============================================================
  * Resistances
  * ============================================================ */
 .ds-statblock .ds-resistances {
-  margin: 0.5rem 0;
+  margin: 0.15rem 0;
 }
 .ds-statblock .ds-resistance-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.35rem;
   flex-wrap: wrap;
-  margin: 0.15rem 0;
-  font-size: 0.85rem;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.2;
 }
 .ds-statblock .ds-resistance-label {
   font-weight: 700;
   color: var(--ds-ink-muted);
-  min-width: 80px;
 }
 .ds-statblock .ds-pill {
   display: inline-block;
-  padding: 1px 8px;
-  border-radius: 10px;
-  font-size: 0.75rem;
+  padding: 0 6px;
+  border-radius: 8px;
+  font-size: 0.7rem;
   color: white;
   text-transform: capitalize;
 }
@@ -226,43 +229,12 @@
 .ds-statblock .ds-pill-weak   { background: var(--ds-pill-weak); }
 
 /* ============================================================
- * Divider (ornament)
- * ============================================================ */
-.ds-statblock .ds-divider {
-  border: none;
-  height: 2px;
-  background: linear-gradient(to right,
-    transparent 0%,
-    var(--ds-rule) 20%,
-    var(--ds-rule) 80%,
-    transparent 100%);
-  margin: 0.75rem 0;
-  position: relative;
-}
-.ds-statblock .ds-divider::after {
-  content: "✦";
-  position: absolute;
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--ds-bg);
-  color: var(--ds-rule);
-  padding: 0 6px;
-  font-size: 0.8rem;
-}
-
-/* ============================================================
  * Section titles
  * ============================================================ */
 .ds-statblock .ds-section-title {
   font-size: 0.95rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
   color: var(--ds-accent);
-  margin: 0 0 0.35rem 0;
-  border-bottom: 1px solid var(--ds-rule);
-  padding-bottom: 0.15rem;
 }
 
 /* ============================================================
@@ -270,20 +242,17 @@
  * ============================================================ */
 .ds-statblock .ds-ability-group {
   border: none;
-  margin: 0.5rem 0 0;
   padding: 0;
   break-inside: avoid;
 }
 .ds-statblock .ds-ability-group > summary {
-  /* Reset browser defaults */
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.35rem;
   cursor: pointer;
   user-select: none;
-  /* Inherit section-title appearance */
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.1rem;
 }
 .ds-statblock .ds-ability-group > summary::-webkit-details-marker,
 .ds-statblock .ds-ability-group > summary::marker {
@@ -305,36 +274,38 @@
  * Traits
  * ============================================================ */
 .ds-statblock .ds-trait {
-  margin: 0.35rem 0;
-  padding: 0.25rem 0;
+  margin: 0.15rem 0;
+  padding: 0.1rem 0 0.1rem 0.4rem;
+  border-left: 3px solid var(--ds-accent-soft);
+  border-radius: 3px;
 }
 .ds-statblock .ds-trait-head {
   display: flex;
   align-items: baseline;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 .ds-statblock .ds-trait-name {
-  font-weight: 700;
+  font-weight: bold;
   font-style: italic;
   color: var(--ds-ink);
   cursor: pointer;
 }
 .ds-statblock .ds-trait-name:hover { color: var(--ds-accent); }
 .ds-statblock .ds-trait-body {
-  margin-top: 0.15rem;
-  font-size: 0.9rem;
+  margin-top: 0;
+  font-size: 0.85rem;
   color: var(--ds-ink);
 }
-.ds-statblock .ds-trait-body p { margin: 0.25rem 0; }
+.ds-statblock .ds-trait-body p { margin: 0.1rem 0; }
 
 /* ============================================================
  * Abilities
  * ============================================================ */
 .ds-statblock .ds-ability {
-  margin: 0.5rem 0;
-  padding: 0.5rem 0.6rem;
+  margin: 0.25rem 0;
+  padding: 0.25rem 0.4rem;
   background: var(--ds-bg-alt);
-  border-left: 4px solid var(--ds-accent);
+  border-left: 3px solid var(--ds-accent);
   border-radius: 3px;
 }
 .ds-statblock .ds-ability-type-maneuver  { border-left-color: #4a6b9b; }
@@ -346,12 +317,12 @@
 .ds-statblock .ds-ability-head {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.25rem;
+  gap: 0.35rem;
+  margin-bottom: 0.1rem;
 }
 .ds-statblock .ds-ability-icon {
-  width: 28px;
-  height: 28px;
+  width: 18px;
+  height: 18px;
   border-radius: 3px;
   object-fit: cover;
   background: var(--ds-bg);
@@ -360,10 +331,10 @@
   flex: 1;
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 .ds-statblock .ds-ability-name {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--ds-ink);
   background: transparent;
@@ -372,6 +343,7 @@
   cursor: pointer;
   font-family: inherit;
   text-align: left;
+  line-height: 1.2;
 }
 .ds-statblock .ds-ability-name:hover { color: var(--ds-accent); }
 .ds-statblock .ds-signature-badge {
@@ -404,30 +376,31 @@
   background: color-mix(in srgb, var(--ds-accent) 10%, transparent);
 }
 .ds-statblock .ds-ability-keywords {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-style: italic;
   color: var(--ds-ink-muted);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.1rem;
+  line-height: 1.2;
 }
 .ds-statblock .ds-ability-meta {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem 0.75rem;
   flex-wrap: wrap;
-  font-size: 0.8rem;
-  margin: 0.25rem 0;
-  padding: 0.25rem 0;
-  border-top: 1px dotted var(--ds-rule);
-  border-bottom: 1px dotted var(--ds-rule);
+  font-size: 0.78rem;
+  margin: 0.1rem 0;
+  padding: 0;
+  line-height: 1.2;
 }
 .ds-statblock .ds-meta-col {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
 }
-.ds-statblock .ds-meta-col-wide { flex: 1; }
+.ds-statblock .ds-meta-col-wide { min-width: 100%; }
 .ds-statblock .ds-meta-label {
   font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--ds-ink-muted);
 }
 .ds-statblock .ds-meta-value {
@@ -436,54 +409,36 @@
   text-transform: capitalize;
 }
 .ds-statblock .ds-ability-effect {
-  font-size: 0.88rem;
-  margin: 0.25rem 0;
-}
-.ds-statblock .ds-ability-effect p { margin: 0.2rem 0; }
-
-.ds-statblock .ds-power-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  margin: 0.35rem 0;
-  padding: 0.3rem 0.5rem;
-  background: var(--ds-bg);
-  border: 1px solid var(--ds-rule);
-  border-radius: 3px;
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--ds-accent);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.ds-statblock .ds-power-row:hover {
-  background: color-mix(in srgb, var(--ds-accent) 10%, var(--ds-bg));
-}
-.ds-statblock .ds-power-char {
-  font-weight: 500;
   font-size: 0.85rem;
+  margin: 0.1rem 0;
+  line-height: 1.25;
+}
+.ds-statblock .ds-ability-effect p { margin: 0.1rem 0; }
+
+.ds-statblock .ds-ability-formula {
+  font-weight: 500;
+  font-size: 0.78rem;
   color: var(--ds-ink-muted);
   text-transform: capitalize;
+  margin-left: 0.2rem;
 }
 
 .ds-statblock dl.ds-power-roll-display {
-  gap: 4px;
+  gap: 2px 6px;
   padding: 0;
-  margin: 0.35rem 0;
+  margin: 0.15rem 0;
 }
 .ds-statblock dl.ds-power-roll-display dt {
   font-family: "Draw Steel Glyphs";
-  font-size: var(--font-size-24);
+  font-size: 1.1rem;
   font-weight: 500;
   line-height: 0.9;
 }
 .ds-statblock dl.ds-power-roll-display dd {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--ds-ink);
+  line-height: 1.25;
 }
 .ds-statblock dl.ds-power-roll-display dd > p,
 .ds-statblock dl.ds-power-roll-display dt > p { margin: 0; }
@@ -495,11 +450,12 @@
 }
 
 .ds-statblock .ds-ability-spend {
-  margin-top: 0.35rem;
-  padding-top: 0.25rem;
+  margin-top: 0.15rem;
+  padding-top: 0.1rem;
   border-top: 1px dotted var(--ds-rule);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-style: italic;
+  line-height: 1.25;
 }
 
 /* ============================================================
