@@ -158,9 +158,9 @@ export function createStatBlockSheet(ParentSheet) {
         img: item.img,
         type: normalizedType,
         typeLabel: ABILITY_TYPE_MAP.get(normalizedType)?.shortLabel ?? normalizedType ?? "",
-        keywords: this._formatSet(sys.keywords),
+        keywords: item.system.formattedLabels?.keywords ?? "",
         distance: item.system.formattedLabels?.distance ?? "",
-        target: this._formatTarget(sys.target),
+        target: item.system.formattedLabels?.target ?? "",
         trigger: sys.trigger,
         rollEnabled: !!sys.power?.roll?.enabled,
         hasTiers: tiers.length > 0,
@@ -186,24 +186,9 @@ export function createStatBlockSheet(ParentSheet) {
       return pairs.filter(r => Number(r.value) !== 0);
     }
 
-    _formatSet(s) {
-      if (!s) return "";
-      if (s instanceof Set) return Array.from(s).join(", ");
-      if (Array.isArray(s)) return s.join(", ");
-      return String(s);
-    }
-
     _formatSigned(v) {
       const n = Number(v) || 0;
       return n >= 0 ? `+${n}` : `${n}`;
-    }
-
-    _formatTarget(t) {
-      if (!t) return "";
-      if (t.custom) return t.custom;
-      const qty = t.value == null ? "Each" : t.value;
-      const kind = t.type || "target";
-      return `${qty} ${kind}`;
     }
 
     _formatEffectTier(td, effectType) {
