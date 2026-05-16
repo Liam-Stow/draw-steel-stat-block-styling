@@ -486,10 +486,7 @@
 
 .ds-statblock .ds-ability-spend {
   margin-top: 0.15rem;
-  padding-top: 0.1rem;
-  border-top: 1px dotted var(--ds-rule);
   font-size: 0.8rem;
-  font-style: italic;
   line-height: 1.25;
 }
 
