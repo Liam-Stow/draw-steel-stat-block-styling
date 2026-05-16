@@ -7,6 +7,8 @@
   <div class="ds-columns">
     {{#if features.length}}
       {{> modules/draw-steel-stat-block-styling/templates/partials/traits.hbs }}
+    {{else if effects.length}}
+      {{> modules/draw-steel-stat-block-styling/templates/partials/traits.hbs }}
     {{/if}}
     {{#if abilities.length}}
       {{> modules/draw-steel-stat-block-styling/templates/partials/abilities.hbs }}
