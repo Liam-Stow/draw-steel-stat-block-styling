@@ -29,6 +29,9 @@ export function createStatBlockSheet(ParentSheet) {
         useAbility: this.prototype._onUseAbility,
         edit: this.prototype._onEditItem,
         editStamina: this.prototype._onEditStamina,
+        viewEffect: this.prototype._onViewEffect,
+        toggleEffect: this.prototype._onToggleEffect,
+        deleteEffect: this.prototype._onDeleteEffect,
       },
     };
 
@@ -73,6 +76,16 @@ export function createStatBlockSheet(ParentSheet) {
         name: item.name,
         enrichedDescription: item.system.description?.value
           ? await TextEditor.enrichHTML(item.system.description.value, { relativeTo: item })
+          : "",
+      })));
+
+      ctx.effects = await Promise.all(Array.from(this.actor.effects).map(async effect => ({
+        id: effect.id,
+        name: effect.name,
+        disabled: effect.disabled,
+        active: effect.active,
+        enrichedDescription: effect.description
+          ? await TextEditor.enrichHTML(effect.description, { relativeTo: effect })
           : "",
       })));
 
@@ -182,6 +195,41 @@ export function createStatBlockSheet(ParentSheet) {
     async _onEditItem(event, target) {
       const item = this._getItemFromTarget(target);
       item?.sheet.render(true);
+    }
+
+    _getEffectFromTarget(target) {
+      const id = target.dataset.effectId ?? target.closest("[data-effect-id]")?.dataset.effectId;
+      return this.actor.effects.get(id) ?? null;
+    }
+
+    async _onViewEffect(event, target) {
+      const effect = this._getEffectFromTarget(target);
+      effect?.sheet.render(true);
+    }
+
+    async _onToggleEffect(event, target) {
+      const effect = this._getEffectFromTarget(target);
+      if (!effect) return;
+      event.stopPropagation();
+      if (effect.disabled) {
+        const ActiveEffectCls = effect.constructor;
+        const start = typeof ActiveEffectCls.getEffectStart === "function"
+          ? ActiveEffectCls.getEffectStart()
+          : undefined;
+        await effect.update({
+          disabled: false,
+          ...(start !== undefined ? { start } : {}),
+          "duration.expired": false,
+        });
+      } else {
+        await effect.update({ disabled: true });
+      }
+    }
+
+    async _onDeleteEffect(event, target) {
+      const effect = this._getEffectFromTarget(target);
+      if (!effect) return;
+      await effect.delete();
     }
 
     async _onEditStamina(event, target) {

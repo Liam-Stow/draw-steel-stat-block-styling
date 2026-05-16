@@ -17,5 +17,34 @@
       {{/if}}
     </div>
   {{/each}}
+  {{#each effects}}
+    <div class="ds-trait ds-trait-effect {{#unless this.active}}ds-trait-disabled{{/unless}}"
+         data-effect-id="{{this.id}}">
+      <div class="ds-trait-head">
+        <input type="checkbox"
+               class="ds-trait-toggle"
+               data-action="toggleEffect"
+               data-effect-id="{{this.id}}"
+               {{#unless this.disabled}}checked{{/unless}}
+               data-tooltip="Enable/disable effect" />
+        <span class="ds-trait-name"
+              data-action="viewEffect"
+              data-effect-id="{{this.id}}"
+              data-tooltip="Open {{this.name}}">{{this.name}}</span>
+        <span class="ds-trait-source" data-tooltip="Active Effect">
+          <i class="fa-solid fa-sparkles"></i>
+        </span>
+        <button class="ds-trait-delete"
+                data-action="deleteEffect"
+                data-effect-id="{{this.id}}"
+                data-tooltip="Delete {{this.name}}">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+      {{#if enrichedDescription}}
+        <div class="ds-trait-body">{{{enrichedDescription}}}</div>
+      {{/if}}
+    </div>
+  {{/each}}
   </details>
 </section>

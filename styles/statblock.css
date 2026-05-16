@@ -297,6 +297,41 @@
   color: var(--ds-ink);
 }
 .ds-statblock .ds-trait-body p { margin: 0.1rem 0; }
+.ds-statblock .ds-trait-effect {
+  border-left-color: var(--ds-accent);
+}
+.ds-statblock .ds-trait-source {
+  font-size: 0.7rem;
+  color: var(--ds-accent);
+  opacity: 0.75;
+}
+.ds-statblock .ds-trait-toggle {
+  margin: 0;
+  cursor: pointer;
+}
+.ds-statblock .ds-trait-delete {
+  background: none;
+  border: none;
+  color: var(--color-text-dark-secondary, #888);
+  cursor: pointer;
+  font-size: 0.75em;
+  line-height: 1;
+  padding: 0 2px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+.ds-statblock .ds-trait:hover .ds-trait-delete {
+  opacity: 1;
+}
+.ds-statblock .ds-trait-delete:hover {
+  color: var(--color-level-error, #c33);
+}
+.ds-statblock .ds-trait-disabled {
+  opacity: 0.5;
+}
+.ds-statblock .ds-trait-disabled .ds-trait-name {
+  text-decoration: line-through;
+}
 
 /* ============================================================
  * Abilities
