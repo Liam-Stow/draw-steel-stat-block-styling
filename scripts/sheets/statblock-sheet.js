@@ -151,8 +151,7 @@ export function createStatBlockSheet(ParentSheet) {
         trigger: sys.trigger,
         rollEnabled: !!sys.power?.roll?.enabled,
         hasTiers: !!(tier1Text || tier2Text || tier3Text),
-        characteristicKey: sys.power?.characteristic?.key,
-        characteristicValue: this._formatSigned(sys.power?.characteristic?.value ?? 0),
+        ...this._prepareRollBonus(item),
         tier1Text,
         tier2Text,
         tier3Text,
@@ -160,6 +159,29 @@ export function createStatBlockSheet(ParentSheet) {
         effectAfter: sys.effect?.after,
         spendValue: sys.spend?.value,
         spendText: sys.spend?.text,
+      };
+    }
+
+    /**
+     * Resolve the power roll bonus shown next to an ability name.
+     * The bonus comes from `power.roll.formula`, not `power.characteristic.value` — the
+     * latter is a sentinel (-5) whenever the ability's roll isn't characteristic-based.
+     */
+    _prepareRollBonus(item) {
+      const power = item.system.power;
+      const formula = power?.roll?.formula ?? "";
+      const usesCharacteristic = formula.includes("@chr");
+
+      let bonus;
+      try {
+        bonus = Roll.safeEval(Roll.replaceFormulaData(formula, item.getRollData(), { missing: "0" }));
+      } catch {
+        bonus = 0;
+      }
+
+      return {
+        characteristicValue: this._formatSigned(bonus),
+        characteristicKey: usesCharacteristic ? power?.characteristic?.key : null,
       };
     }
 
