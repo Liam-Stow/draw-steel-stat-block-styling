@@ -4,13 +4,15 @@
     <div class="ds-header-level">Level {{system.monster.level}}</div>
   </div>
   <div class="ds-header-meta">
-    <span class="ds-header-role">
-      {{#if system.monster.organizationLabel}}{{system.monster.organizationLabel}}{{/if}}
-      {{#if system.monster.roleLabel}}{{system.monster.roleLabel}}{{/if}}
+    <span class="ds-header-meta-text">
+      <span class="ds-header-role">
+        {{#if system.monster.organizationLabel}}{{system.monster.organizationLabel}}{{/if}}
+        {{#if system.monster.roleLabel}}{{system.monster.roleLabel}}{{/if}}
+      </span>
+      {{#if keywordLabels}}
+        <span class="ds-header-keywords">{{keywordLabels}}</span>
+      {{/if}}
     </span>
-    {{#if keywordLabels}}
-      <span class="ds-header-keywords">{{keywordLabels}}</span>
-    {{/if}}
     <span class="ds-header-ev">EV {{system.ev}}</span>
   </div>
 </header>

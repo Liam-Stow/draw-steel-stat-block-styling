@@ -3,7 +3,10 @@
     "allow": [
       "WebFetch(domain:api.github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(git push *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\LiamS\\\\OneDrive\\\\sourceCode\\\\foundry-modules\\\\draw-steel-stat-block-styling\" -Recurse -Filter \"*.html\" -o File)",
+      "Bash(Select-Object -ExpandProperty FullName)"
     ]
   }
 }

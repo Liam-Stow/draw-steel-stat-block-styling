@@ -1,7 +1,11 @@
 <section class="ds-statblock">
-  {{> modules/draw-steel-stat-block-styling/templates/partials/header.hbs }}
-  {{> modules/draw-steel-stat-block-styling/templates/partials/stats-row.hbs }}
-  {{> modules/draw-steel-stat-block-styling/templates/partials/characteristics.hbs }}
+  <div class="ds-hero">
+    {{> modules/draw-steel-stat-block-styling/templates/partials/header.hbs }}
+    <div class="ds-hero-stats">
+      {{> modules/draw-steel-stat-block-styling/templates/partials/stats-row.hbs }}
+      {{> modules/draw-steel-stat-block-styling/templates/partials/characteristics.hbs }}
+    </div>
+  </div>
   {{> modules/draw-steel-stat-block-styling/templates/partials/resistances.hbs }}
 
   <div class="ds-columns">

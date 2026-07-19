@@ -19,7 +19,7 @@ export function createStatBlockSheet(ParentSheet) {
   return class DrawSteelStatBlockSheet extends ParentSheet {
     static DEFAULT_OPTIONS = {
       classes: ["draw-steel", "statblock-sheet"],
-      position: { width: 580, height: 760 },
+      position: { width: 760, height: 600 },
       window: { resizable: true, icon: "fa-solid fa-scroll" },
       actions: {
         // AppV2 merges DEFAULT_OPTIONS up the prototype chain, so the parent's `roll`
