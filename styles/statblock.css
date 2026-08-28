@@ -455,6 +455,10 @@
 }
 .ds-statblock .ds-ability-effect p { margin: 0.1rem 0; }
 
+/* Keep the effect label ("Effect", "Spend 3 Malice", ...) on the same line as the
+   first paragraph of the ProseMirror-authored description. */
+.ds-statblock .ds-ability-effect > .ds-effect-label + p { display: inline; }
+
 .ds-statblock .ds-ability-formula {
   font-weight: 500;
   font-size: 0.78rem;
@@ -487,12 +491,6 @@
   font-size: var(--font-size-16);
   text-transform: lowercase;
   line-height: 0.9;
-}
-
-.ds-statblock .ds-ability-spend {
-  margin-top: 0.15rem;
-  font-size: 0.8rem;
-  line-height: 1.25;
 }
 
 /* ============================================================

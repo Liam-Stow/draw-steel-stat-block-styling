@@ -60,14 +60,6 @@ export function createStatBlockSheet(ParentSheet) {
 
       const allAbilities = await Promise.all(abilityItems.map(item => this._prepareAbility(item)));
 
-      // Enrich effect HTML so inline roll links and @UUID refs are functional.
-      await Promise.all(abilityItems.map(async (item, i) => {
-        const a = allAbilities[i];
-        const opts = { relativeTo: item };
-        if (a.effectBefore) a.effectBefore = await TextEditor.enrichHTML(a.effectBefore, opts);
-        if (a.effectAfter)  a.effectAfter  = await TextEditor.enrichHTML(a.effectAfter,  opts);
-      }));
-
       ctx.abilities = allAbilities;
 
       // Convert features to plain objects with enriched ProseMirror descriptions.
@@ -152,14 +144,46 @@ export function createStatBlockSheet(ParentSheet) {
         rollEnabled: !!sys.power?.roll?.enabled,
         hasTiers: !!(tier1Text || tier2Text || tier3Text),
         ...this._prepareRollBonus(item),
+        ...(await this._prepareSpecialEffects(item)),
         tier1Text,
         tier2Text,
         tier3Text,
-        effectBefore: sys.effect?.before,
-        effectAfter: sys.effect?.after,
-        spendValue: sys.spend?.value,
-        spendText: sys.spend?.text,
       };
+    }
+
+    /**
+     * Build the display data for an ability's special effects (Effect, Spend, Persistent, ...).
+     * Draw Steel 1.1 replaced `system.effect.before` / `.after` and `system.spend` with a
+     * `system.effects` collection of SpecialEffect pseudo-documents, each carrying its own
+     * label and a `before` flag saying which side of the power roll it renders on.
+     * Descriptions are enriched so inline roll links and @UUID refs stay functional.
+     */
+    async _prepareSpecialEffects(item) {
+      const sys = item.system;
+      const opts = { relativeTo: item };
+      const beforeEffects = [];
+      const afterEffects = [];
+      const enrich = text => (text ? TextEditor.enrichHTML(text, opts) : Promise.resolve(""));
+
+      const specialEffects = sys.effects?.sortedContents;
+      if (specialEffects) {
+        for (const effect of specialEffects) {
+          const entry = { label: effect.label, text: await enrich(effect.description) };
+          if (entry.label || entry.text) (effect.before ? beforeEffects : afterEffects).push(entry);
+        }
+        return { beforeEffects, afterEffects };
+      }
+
+      // Pre-1.1 systems, where effects were flat fields on the ability.
+      if (sys.effect?.before) beforeEffects.push({ label: "", text: await enrich(sys.effect.before) });
+      if (sys.effect?.after) afterEffects.push({ label: "", text: await enrich(sys.effect.after) });
+      if (sys.spend?.text) {
+        afterEffects.push({
+          label: `Spend ${sys.spend.value ?? ""}`.trim(),
+          text: await enrich(sys.spend.text),
+        });
+      }
+      return { beforeEffects, afterEffects };
     }
 
     /**

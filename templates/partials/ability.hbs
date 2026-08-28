@@ -27,9 +27,9 @@
     {{#if trigger}}<div class="ds-meta-col ds-meta-col-wide"><span class="ds-meta-label">Trigger</span><span class="ds-meta-value">{{trigger}}</span></div>{{/if}}
   </div>
 
-  {{#if effectBefore}}
-    <div class="ds-ability-effect">{{{effectBefore}}}</div>
-  {{/if}}
+  {{#each beforeEffects}}
+    <div class="ds-ability-effect">{{#if label}}<strong class="ds-effect-label">{{label}}:</strong> {{/if}}{{{text}}}</div>
+  {{/each}}
 
   {{#if hasTiers}}
     <dl class="ds-power-roll-display">
@@ -39,11 +39,7 @@
     </dl>
   {{/if}}
 
-  {{#if effectAfter}}
-    <div class="ds-ability-effect">{{{effectAfter}}}</div>
-  {{/if}}
-
-  {{#if spendText}}
-    <div class="ds-ability-spend"><strong>Spend {{spendValue}}:</strong> {{{spendText}}}</div>
-  {{/if}}
+  {{#each afterEffects}}
+    <div class="ds-ability-effect">{{#if label}}<strong class="ds-effect-label">{{label}}:</strong> {{/if}}{{{text}}}</div>
+  {{/each}}
 </article>
